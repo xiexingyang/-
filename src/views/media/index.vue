@@ -50,10 +50,10 @@
       <el-table-column label="操作">
           <template slot-scope="scope">
         <el-button type="primary" @click="goedit(scope.row.id)">编辑</el-button>
-        <el-button type="" @click="changeStatus(scope.row)">下架</el-button>
+        <el-button class="upstore" v-if="scope.row.status==0" type="" @click="changestatus(scope.row)">上架</el-button>
+        <el-button v-if="scope.row.status==1" type="" @click="changeStatus(scope.row)">下架</el-button>
         <el-button type="warning" @click="deleteitem(scope.row.id)">删除</el-button>
           </template>
-
       </el-table-column>
     </el-table>
     <el-pagination
@@ -101,7 +101,7 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="status">
-            <el-radio label="上架"></el-radio>
+            <el-radio  label="上架"></el-radio>
             <el-radio label="下架"></el-radio>
           </el-radio-group>
         </el-form-item>
@@ -178,7 +178,10 @@ export default {
     goedit(){},
     //点击下架/上架
     changeStatus(e){
- console.log(e.status);
+    e.status=0
+    },
+    changestatus(e){
+    e.status=1
     }
   },
 };
@@ -237,5 +240,9 @@ export default {
 }
 .fuwenben {
   margin-top: 50px;
+}
+.upstore{
+    background-color: green;
+    color: white;
 }
 </style>

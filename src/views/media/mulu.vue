@@ -1,8 +1,31 @@
 <template>
-  <div class="context">
+  <div>
+    <el-card class="top_box">
+        <el-row >
+            <el-col :span="4">
+                <img :src="item.cover" alt="">
+            </el-col>
+            <el-col :span="16">
+                <h3>{{item.title}}</h3>
+                <p>{{item.content}}</p>
+                <p>￥{{item.price}}</p>
+                <div>
+                    <el-button v-if="item.status==1" @click="godown" type="warning">下架</el-button>
+                    <el-button v-if="item.status==0" @click="goup" type="warning">上架</el-button>
+                    <el-button v-if="item.isend==0" type="primary" @click="goend">设为已完结</el-button>
+                    <el-button v-if="item.isend==1" type="primary" @click="gomake">设为连载中</el-button>
+                </div>
+            </el-col>
+            <el-col :span="4">
+                <p v-if="item.isend==1">已完结</p>
+                <p v-if="item.isend==0">连载中</p>
+            </el-col>
+        </el-row>
+    </el-card>
+    <div class="context">
     <div class="top_box">
       <el-button type="primary" icon="edit" @click="dialogFormVisible = true"
-        >新增音频</el-button
+        >新增目录</el-button
       >
       <div class="inner_box">
         <el-select v-model="select" placeholder="请选择活动区域">
@@ -48,27 +71,12 @@
         width="300px"
       ></el-table-column>
       <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button type="primary" @click="goedit(scope.row.id)"
-            >编辑</el-button
-          >
-          <el-button
-            v-if="scope.row.status == 0"
-            class="upstore"
-            type=""
-            @click="changestatus(scope.row)"
-            >上架</el-button
-          >
-          <el-button
-            v-if="scope.row.status == 1"
-            type=""
-            @click="changeStatus(scope.row)"
-            >下架</el-button
-          >
-          <el-button type="warning" @click="deleteitem(scope.row.id)"
-            >删除</el-button
-          >
-        </template>
+          <template slot-scope="scope">
+        <el-button type="primary" @click="goedit(scope.row.id)">编辑</el-button>
+        <el-button class="upstore" v-if="scope.row.status==0" type="" @click="changestatus(scope.row)">上架</el-button>
+        <el-button v-if="scope.row.status==1" type="" @click="changeStatus(scope.row)">下架</el-button>
+        <el-button type="warning" @click="deleteitem(scope.row.id)">删除</el-button>
+          </template>
       </el-table-column>
     </el-table>
     <el-pagination
@@ -83,9 +91,12 @@
     </el-pagination>
     <!-- 新增图文 -->
     <el-dialog title="新增图文" :visible.sync="dialogFormVisible" width="50%">
-      <el-form>
+      <el-form >
         <el-form-item label="标题">
-          <el-input v-model="title" placeholder="请输入标题"></el-input>
+          <el-input
+            v-model="title"
+            placeholder="请输入标题"
+          ></el-input>
         </el-form-item>
         <el-form-item label="封面">
           <el-upload
@@ -101,17 +112,7 @@
           <Edit class="fuwenben"></Edit>
         </el-form-item>
         <el-form-item label="课程内容">
-          <el-upload
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-change="handleChange"
-            :file-list="fileList"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">
-              请上传音频
-            </div>
-          </el-upload>
+          <Edit class="fuwenben"></Edit>
         </el-form-item>
         <el-form-item label="课程价格">
           <el-input-number
@@ -123,7 +124,7 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="status">
-            <el-radio label="上架"></el-radio>
+            <el-radio  label="上架"></el-radio>
             <el-radio label="下架"></el-radio>
           </el-radio-group>
         </el-form-item>
@@ -136,14 +137,16 @@
       </div>
     </el-dialog>
   </div>
+  </div>
 </template>
+
 <script>
-import { fetchList } from "../../api/audio";
+import { fetchList, deleteMedia } from "../../api/media";
 import Edit from "../../components/Tinymce/index";
 export default {
   data() {
     return {
-      status: "",
+    status:"",
       num: 1,
       datalist: [],
       keyword: "",
@@ -153,10 +156,10 @@ export default {
       pagesize: 2,
       total: 0,
       dialogFormVisible: false,
-      title: "",
+        title:"",
       dialogImageUrl: "",
       dialogVisible: false,
-      fileList:[]
+      item:"",
     };
   },
   components: {
@@ -164,6 +167,10 @@ export default {
   },
   created() {
     this.getdatalist();
+  },
+    mounted(){
+      this.item=this.$route.params.data
+      console.log(this.item);
   },
   methods: {
     getdatalist() {
@@ -197,23 +204,33 @@ export default {
       });
     },
     //点击编辑
-    goedit() {},
+    goedit(){},
     //点击下架/上架
-    changeStatus(e) {
-      e.status = 0;
+    changeStatus(e){
+    e.status=0
     },
-    changestatus(e) {
-      e.status = 1;
+    changestatus(e){
+    e.status=1
     },
-    handleChange(file, fileList) {
-      this.fileList = fileList.slice(-3);
+    godown(){
+        this.item.status=0
     },
+    goup(){
+        this.item.status=1
+    },
+    goend(){
+        this.item.isend=1
+    },
+    gomake(){
+        this.item.isend=0
+    }
   },
 };
 </script>
-
-
-<style  scope>
+<style scope>
+.top_box{
+    margin: 20px;
+}
 .context {
   padding: 20px;
 }
@@ -267,8 +284,8 @@ export default {
 .fuwenben {
   margin-top: 50px;
 }
-.upstore {
-  background-color: green;
-  color: white;
+.upstore{
+    background-color: green;
+    color: white;
 }
 </style>

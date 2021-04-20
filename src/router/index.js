@@ -168,8 +168,14 @@ export const asyncRoutes = [
         name:"Column",
         meta:{
           title:"专栏"
-        }
+        },
       },
+      {
+        hidden:true,
+        path:"mulu",
+        component:()=>import("@/views/media/mulu"),
+        name:"Mulu",
+      }
     ]
   },
   // {
