@@ -123,14 +123,14 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="status">
-            <el-radio label="上架"></el-radio>
+            <el-radio label="上架" ></el-radio>
             <el-radio label="下架"></el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
+        <el-button type="primary" @click="commit_from"
           >提交</el-button
         >
       </div>
@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import { fetchList, deleteMedia } from "../../api/video";
+import { fetchList,} from "../../api/video";
 import Edit from "../../components/Tinymce/index";
 export default {
   data() {
@@ -208,6 +208,10 @@ export default {
     },
      handleChange(file, fileList) {
         this.fileList = fileList.slice(-3);
+      },
+      commit_from(){
+        this.dialogFormVisible = false 
+        console.log(this.status);
       }
   },
 };

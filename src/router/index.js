@@ -178,6 +178,18 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/user',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/user/user'),
+        name: 'Icons',
+        meta: { title: '用户', icon: 'user', noCache: true }
+      }
+    ]
+  },
   // {
   //   path: '/permission',
   //   component: Layout,

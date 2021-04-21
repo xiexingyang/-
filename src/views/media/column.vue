@@ -142,7 +142,7 @@
 </template>
 
 <script>
-import { fetchList, deleteMedia } from "../../api/column";
+import { fetchList, } from "../../api/column";
 import Edit from "../../components/Tinymce/index";
 export default {
   data() {
